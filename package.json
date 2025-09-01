@@ -16,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/njhmagyar/github-mcp-server/issues"
   },
-  "homepage": "https://github.com/njhmagyar/github-mcp-server#readme"
+  "homepage": "https://github.com/njhmagyar/github-mcp-server#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "@octokit/rest": "^22.0.0",
+    "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
 }
