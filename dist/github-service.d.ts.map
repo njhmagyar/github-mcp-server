@@ -1,0 +1,1 @@
+{"version":3,"file":"github-service.d.ts","sourceRoot":"","sources":["../src/github-service.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,iBAAiB,EAAE,UAAU,EAAE,MAAM,YAAY,CAAC;AAE3D,qBAAa,aAAa;IACxB,OAAO,CAAC,OAAO,CAAU;gBAEb,KAAK,EAAE,MAAM;IASnB,gBAAgB,CAAC,OAAO,EAAE,iBAAiB,GAAG,OAAO,CAAC,UAAU,CAAC;IAkBjE,gBAAgB,IAAI,OAAO,CAAC,UAAU,EAAE,CAAC;CAIhD"}

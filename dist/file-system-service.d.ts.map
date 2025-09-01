@@ -1,0 +1,1 @@
+{"version":3,"file":"file-system-service.d.ts","sourceRoot":"","sources":["../src/file-system-service.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,UAAU,EAAE,MAAM,YAAY,CAAC;AAExC,qBAAa,iBAAiB;mBAEP,eAAe;WASvB,eAAe,CAAC,IAAI,EAAE,MAAM,GAAG,OAAO,CAAC,UAAU,CAAC;CA2BhE"}

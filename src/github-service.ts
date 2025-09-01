@@ -1,31 +1,30 @@
 import { Octokit } from '@octokit/rest';
-import { GitHubRepoOptions, GitHubRepo } from './types';
+import fetch from 'node-fetch';
+import { GitHubRepoOptions, GitHubRepo } from './types.js';
 
 export class GitHubService {
-  private octokit: Octokit;  // 'private' means only this class can access it
+  private octokit: Octokit;
 
-  // Constructor - runs when we create a new GitHubService instance
   constructor(token: string) {
     this.octokit = new Octokit({
       auth: token,
+      request: {
+        fetch: fetch as any,
+      },
     });
   }
 
-  // Async function that returns a Promise<GitHubRepo>
-  // This is like async methods in Vue components
   async createRepository(options: GitHubRepoOptions): Promise<GitHubRepo> {
     try {
       const response = await this.octokit.rest.repos.createForAuthenticatedUser({
         name: options.name,
         description: options.description,
-        private: options.private ?? false,  // ?? is "nullish coalescing" - uses false if private is undefined
+        private: options.private ?? false,
         auto_init: options.autoInit ?? true,
       });
 
-      // TypeScript knows response.data has the right shape because of our types
       return response.data as GitHubRepo;
     } catch (error) {
-      // TypeScript helps us handle errors properly
       if (error instanceof Error) {
         throw new Error(`Failed to create repository: ${error.message}`);
       }

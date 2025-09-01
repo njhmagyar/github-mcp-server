@@ -1,15 +1,15 @@
+import * as nodePath from 'node:path';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { GitHubService } from './github-service';
-import { ToolResult } from './types';
+import { FileSystemService } from './file-system-service.js';
+import { GitHubService } from './github-service.js';  // Note the .js extension
+import { ToolResult } from './types.js';
 
-// This is our GitHub service instance - we'll initialize it later
 let githubService: GitHubService;
 
 export function initializeGitHubService(token: string): void {
   githubService = new GitHubService(token);
 }
 
-// Define our tools - these are what Claude can call
 export const tools: Tool[] = [
   {
     name: 'create_github_repo',
@@ -38,13 +38,30 @@ export const tools: Tool[] = [
     description: 'List your GitHub repositories',
     inputSchema: {
       type: 'object',
-      properties: {},  // No parameters needed
+      properties: {},
       required: []
+    }
+  },
+  {
+    name: 'create_local_directory',
+    description: 'Create a directory in the local file system',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        baseDirectory: {
+          type: 'string',
+          description: 'Absolute path of the parent directory of the new directory'
+        },  
+        projectName: {
+          type: 'string',
+          description: 'Name of the new directory to create'
+        }
+      },
+      required: ['baseDirectory', 'projectName']
     }
   }
 ];
 
-// Tool handlers - these functions run when Claude calls our tools
 export async function handleToolCall(name: string, arguments_: any): Promise<ToolResult> {
   switch (name) {
     case 'create_github_repo':
@@ -52,6 +69,9 @@ export async function handleToolCall(name: string, arguments_: any): Promise<Too
 
     case 'list_github_repos':
       return await listGitHubRepos();
+
+    case 'create_local_directory':
+      return await createLocalDirectory(arguments_);
 
     default:
       return {
@@ -61,10 +81,8 @@ export async function handleToolCall(name: string, arguments_: any): Promise<Too
   }
 }
 
-// Individual tool implementations
 async function createGitHubRepo(args: any): Promise<ToolResult> {
   try {
-    // TypeScript helps us validate the arguments have the right structure
     const repo = await githubService.createRepository({
       name: args.name,
       description: args.description,
@@ -107,4 +125,9 @@ async function listGitHubRepos(): Promise<ToolResult> {
       message: error instanceof Error ? error.message : 'Unknown error'
     };
   }
+}
+
+async function createLocalDirectory(args: any): Promise<ToolResult> {
+  const path = nodePath.join(args.baseDirectory, args.projectName);
+  return FileSystemService.createDirectory(path);
 }

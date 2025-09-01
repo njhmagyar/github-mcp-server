@@ -13,6 +13,7 @@ export interface GitHubRepo {
   full_name: string;
   html_url: string;
   clone_url: string;
+  private: boolean;
 }
 
 // Tool result type - what our MCP tools return to Claude
