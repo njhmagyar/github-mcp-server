@@ -45,6 +45,7 @@ export class FileSystemService {
     try {
       await fs.access(directoryPath);
     } catch (error) {
+      console.error('Error checking for existing directory: ', error instanceof Error ? error.message : 'Oops')
       const directoryResult = await this.createDirectory(directoryPath);
       if (!directoryResult.success) {
         return directoryResult;
@@ -57,6 +58,7 @@ export class FileSystemService {
         message: 'Git repo initialized successfully!'
       }
     } catch (error) {
+      console.log('Error initializing git directory: ', error instanceof Error ? error.message : 'Oops again')
       return {
         success: false,
         message: error instanceof Error ? error.message : 'Unknown error'
