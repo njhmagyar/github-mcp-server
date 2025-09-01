@@ -1,7 +1,7 @@
 import * as nodePath from 'node:path';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { FileSystemService } from './file-system-service.js';
-import { GitHubService } from './github-service.js';  // Note the .js extension
+import { GitHubService } from './github-service.js';
 import { ToolResult } from './types.js';
 
 let githubService: GitHubService;
@@ -59,6 +59,24 @@ export const tools: Tool[] = [
       },
       required: ['baseDirectory', 'projectName']
     }
+  },
+  {
+    name: 'initialize_git_repository',
+    description: 'Initializes a directory with version control, creating the folder if necessary',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        baseDirectory: {
+          type: 'string',
+          description: 'Absolute path of the directory to initialize (becomes the parent of the git directory if newDirectoryName is present)'
+        },
+        newDirectoryName: {
+          type: 'string',
+          description: 'Name of the directory to initialize with git if it does not exist yet'
+        }
+      },
+      required: ['baseDirectory']
+    }
   }
 ];
 
@@ -72,6 +90,9 @@ export async function handleToolCall(name: string, arguments_: any): Promise<Too
 
     case 'create_local_directory':
       return await createLocalDirectory(arguments_);
+
+    case 'initialize_git_repository':
+      return await initializeGitRepository(arguments_);
 
     default:
       return {
@@ -130,4 +151,9 @@ async function listGitHubRepos(): Promise<ToolResult> {
 async function createLocalDirectory(args: any): Promise<ToolResult> {
   const path = nodePath.join(args.baseDirectory, args.projectName);
   return FileSystemService.createDirectory(path);
+}
+
+async function initializeGitRepository(args: any): Promise<ToolResult> {
+  const path = args.newDirectoryName ? nodePath.join(args.baseDirectory, args.newDirectoryName) : args.baseDirectory;
+  return FileSystemService.initializeGit(path);
 }

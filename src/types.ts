@@ -22,3 +22,8 @@ export interface ToolResult {
   message: string;
   data?: any;  // Optional additional data
 }
+
+export interface ShellCommandResult {
+  stdout: string;
+  stderr: string;
+}

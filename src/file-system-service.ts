@@ -1,5 +1,6 @@
 import * as fs from 'fs/promises';
 import { ToolResult } from './types.js';
+import { ShellService } from './shell-service.js';
 
 export class FileSystemService {
 
@@ -36,6 +37,29 @@ export class FileSystemService {
       return {
         success: false,
         message: 'Unknown error occurred creating directory'
+      }
+    }
+  }
+
+  static async initializeGit(directoryPath: string): Promise<ToolResult> {
+    try {
+      await fs.access(directoryPath);
+    } catch (error) {
+      const directoryResult = await this.createDirectory(directoryPath);
+      if (!directoryResult.success) {
+        return directoryResult;
+      }
+    }
+    try {
+      await ShellService.runShellCommand(directoryPath, 'git init');
+      return {
+        success: true,
+        message: 'Git repo initialized successfully!'
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Unknown error'
       }
     }
   }
