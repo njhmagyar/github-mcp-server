@@ -1,6 +1,6 @@
 # GitHub MCP Server
 
-A TypeScript-based playground for developing my knowledge of model context processors.
+A TypeScript-based playground for developing my knowledge of model context protocols.
 
 So far I've built tools for:
 - Creating a new directory on my local file system
